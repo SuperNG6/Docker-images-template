@@ -1,0 +1,8 @@
+#!/usr/bin/with-contenv bash
+
+exec \
+	s6-setuidgid abc command
+  > /dev/stdout \
+  2 > /dev/stderr
+
+echo 'job'

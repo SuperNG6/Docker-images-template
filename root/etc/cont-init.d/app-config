@@ -1,0 +1,37 @@
+#! /usr/bin/with-contenv bash
+
+
+# make folders
+mkdir -p \
+	/config/ssl
+
+# 判断是否需要创建文件
+if [[ ! -e /xx/xxx ]]
+then
+  cp /xx/xxx
+fi
+
+#设定定时任务
+if [ `grep  -c 定时任务.sh /var/spool/cron/crontabs/root` -eq 0 ];then
+echo "0       0       *       *       *       /定时任务.sh" >> /var/spool/cron/crontabs/root
+echo 定时更新任务已设定。
+else
+echo 更新任务已存在。
+fi
+
+# permissions
+chown -R abc:abc \
+	/config \
+  /downloads
+
+chmod a+x sh
+
+
+#启动时更新trackers。
+if [ "$TRACKERSAUTO" == "YES" ];then
+/usr/local/qbittorrent/updatetrackers.sh
+fi
+
+#设置时区
+ln -sf /usr/share/zoneinfo/$TZ   /etc/localtime 
+echo $TZ > /etc/timezone
